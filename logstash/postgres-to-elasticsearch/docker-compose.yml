@@ -1,0 +1,22 @@
+services:
+  logstash:
+    image: docker.elastic.co/logstash/logstash:9.0.0
+    container_name: logstash
+    ports: ["5044:5044", "9600:9600"]
+    restart: always
+    networks: ["elastic"]
+    environment:
+      - XPACK_MONITORING_ENABLED=false
+      - http.host="0.0.0.0"
+      - monitoring.elasticsearch.hosts=http://elasticsearch:9200
+    volumes:
+       - ./pipeline/:/usr/share/logstash/pipeline/
+       - ./jdbc-drivers:/usr/share/logstash/jdbc-drivers
+    healthcheck:
+      test: bin/logstash -t
+      interval: 60s
+      timeout: 50s
+      retries: 5
+networks:
+  elastic:
+    external: true

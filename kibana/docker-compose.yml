@@ -1,0 +1,25 @@
+services:
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.0.0
+    container_name: kibana
+    ports: ["5601:5601"]
+    volumes:
+      - ./tmp/kibana/config:/usr/share/kibana/config
+      - ./tmp/kibana/data:/usr/share/kibana/data
+    environment:
+      SERVER_NAME: 127.0.0.1
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    networks: ["elknet"]
+    restart: "unless-stopped"
+    healthcheck:
+      test: curl -s https://localhost:5601 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
+      interval: 30s
+      timeout: 10s
+      retries: 5
+networks:
+  elknet:
+    external: true
+volumes:
+  es_data:
+  postgresql_data
