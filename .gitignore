@@ -2,7 +2,8 @@ media
 .DS_Store
 tmp
 config
-.env
+*.env
 *.txt
 *.jar
 certs
+drivers/**

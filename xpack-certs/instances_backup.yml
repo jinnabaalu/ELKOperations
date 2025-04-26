@@ -1,8 +1,11 @@
 instances:
   - name: elasticsearch
     ip:
-      - 192.168.0.103
       - 127.0.0.1
+      # - PUBLIC_IP
+      # - PRIVATE_IP
     dns:
       - elasticsearch
       - localhost
+      # - FQDN
+      # - HOSTNAME

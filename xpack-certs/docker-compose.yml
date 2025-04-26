@@ -1,0 +1,19 @@
+services:
+  certutil:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.0.0
+    container_name: certutil
+    command: >
+      bash -c "
+        mkdir -p certs &&
+        bin/elasticsearch-certutil ca --silent --pem -out certs/ca.zip &&
+        unzip certs/ca.zip -d certs &&
+        bin/elasticsearch-certutil cert --silent --pem \
+          --in /usr/share/elasticsearch/instances.yml \
+          --out certs/certs.zip \
+          --ca-cert certs/ca/ca.crt \
+          --ca-key certs/ca/ca.key &&
+        unzip -q certs/certs.zip -d certs &&
+        echo '✅ All certs generated in ./certs'"
+    volumes:
+      - ./instances.yml:/usr/share/elasticsearch/instances.yml
+      - ./certs:/usr/share/elasticsearch/certs

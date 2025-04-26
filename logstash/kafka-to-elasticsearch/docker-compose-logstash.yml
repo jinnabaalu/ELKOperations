@@ -1,0 +1,34 @@
+version: '3.3'
+services:
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.2.1
+    container_name: logstash
+    secrets:
+      - source: logstash.conf
+        target: /usr/share/logstash/pipeline/logstash.conf
+      - source: logstash.yml
+        target: /usr/share/logstash/config/logstash.yml
+    # volumes:
+    #   - ./logstash.conf:/etc/logstash/conf.d/logstash.conf:ro
+    #   - ./logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+    # volumes:
+    #   - type: bind
+    #     source: ./conf/logstash.yml
+    #     target: /usr/share/logstash/config/logstash.yml
+    #     read_only: true
+    #   - type: bind
+    #     source: ./pipeline/logstash
+    #     target: /usr/share/logstash/pipeline
+    #     read_only: true
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    ports:
+      - "5044:5044"
+      - "5000:5000/tcp"
+      - "5000:5000/udp"
+      - "9600:9600"
+secrets:
+  logstash.yml:
+    file: ./logstash.yml
+  logstash.conf:
+    file: ./logstash.conf

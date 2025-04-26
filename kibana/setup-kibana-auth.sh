@@ -14,12 +14,7 @@ done
 echo -e "\n \033[1;32m✅ Elasticsearch is up!\033[0m"
 
 echo "\n 🔧 Setting kibana_system password..."
-until curl -s -X POST --cacert ./certs/ca/ca.crt \
-  -u "elastic:${ELASTIC_PASSWORD}" \
-  -H "Content-Type: application/json" \
-  https://localhost:9200/_security/user/kibana_system/_password \
-  -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do
-    echo "\n ⏳ Retrying to set kibana_system password..."
+until curl -s -X POST --cacert ./certs/ca/ca.crt -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" https://localhost:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do    echo "\n ⏳ Retrying to set kibana_system password..."
     sleep 5
 done
 
