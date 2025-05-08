@@ -6,15 +6,11 @@ services:
       - ./instances.yml:/usr/share/elasticsearch/instances.yml
       - ./certs:/usr/share/elasticsearch/certs
     entrypoint: >
-      bash -c "
-      mkdir -p certs &&
-      bin/elasticsearch-certutil ca --silent --pem -out certs/ca.zip &&
-      unzip -q certs/ca.zip -d certs &&
-      bin/elasticsearch-certutil cert --silent --pem
-        --in instances.yml
-        --out certs/certs.zip
-        --ca-cert certs/ca/ca.crt
-        --ca-key certs/ca/ca.key &&
-      unzip -q certs/certs.zip -d certs &&
-      echo '✅ Done generating certs in ./certs' &&
-      sleep 10"
+      bash -c "rm -rf /usr/share/elasticsearch/certs/* &&
+               mkdir -p /usr/share/elasticsearch/certs &&
+               bin/elasticsearch-certutil ca --silent --pem -out /usr/share/elasticsearch/certs/ca.zip &&
+               unzip -q /usr/share/elasticsearch/certs/ca.zip -d /usr/share/elasticsearch/certs &&
+               bin/elasticsearch-certutil cert --silent --pem --in /usr/share/elasticsearch/instances.yml --out /usr/share/elasticsearch/certs/certs.zip --ca-cert /usr/share/elasticsearch/certs/ca/ca.crt --ca-key /usr/share/elasticsearch/certs/ca/ca.key &&
+               unzip -q /usr/share/elasticsearch/certs/certs.zip -d /usr/share/elasticsearch/certs &&
+               echo '✅ Done generating certs in ./certs' &&
+               sleep 10"

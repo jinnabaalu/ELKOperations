@@ -2,6 +2,14 @@
 
 ## Get Mapings and setting 
 
+curl -s -X POST --cacert ./certs/ca/ca.crt \
+-u "elastic:vbv123" \
+-H "Content-Type: application/json" \
+https://localhost:9200/_security/user/kibana_system/_password \
+-d "{\"password\":\"kib123\"}"
+
+
+
 ```bash
 curl -XGET 'localhost:9200/<INDEX_NAME>/_mappings?pretty' >> original-mappings-settings.json
 
