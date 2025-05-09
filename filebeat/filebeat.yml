@@ -1,0 +1,42 @@
+filebeat.inputs:
+  - type: filestream
+    id: dynamic-filename-logs
+    enabled: true
+    paths:
+      - /log/*.log
+    parsers:
+      - ndjson:
+          overwrite_keys: true
+    scan_frequency: 10s
+    close_inactive: 2m
+
+processors:
+  - dissect:
+      tokenizer: "/log/%{filename}.log"
+      field: log.file.path
+      target_prefix: ""
+  - script:
+      lang: javascript
+      id: lowercase-index-name
+      source: >
+        function process(event) {
+          var lowerIndex = event.Get("filename").toLowerCase();
+          event.Put("_dynamic_index", lowerIndex);
+        }
+
+output.elasticsearch:
+  hosts: ["https://elasticsearch:9200"]
+  index: "%{[_dynamic_index]}"
+  username: "elastic"
+  password: "your_password"
+
+  ssl:
+    certificate_authorities: ["/usr/share/filebeat/certs/ca.crt"]
+    verification_mode: full 
+
+setup.template:
+  name: "dynamic-logs"
+  pattern: "*"
+  enabled: false
+
+logging.level: info

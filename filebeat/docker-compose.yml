@@ -1,0 +1,12 @@
+filebeat:
+    image: docker.elastic.co/beats/filebeat:9.0.0
+    container_name: filebeat
+    user: root
+    volumes:
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs:/logs:ro
+    networks:
+      - elknet
+networks:
+  elknet:
+    external: true
