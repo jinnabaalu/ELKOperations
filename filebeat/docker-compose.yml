@@ -5,6 +5,7 @@ filebeat:
     volumes:
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - ./logs:/logs:ro
+      - ./certs:/usr/share/filebeat/certs:ro
     networks:
       - elknet
 networks:
