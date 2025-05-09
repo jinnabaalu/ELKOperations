@@ -1,7 +1,8 @@
-filebeat:
+services:
+  filebeat:
     image: docker.elastic.co/beats/filebeat:9.0.0
     container_name: filebeat
-    user: root
+    user: "0"
     volumes:
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - ./logs:/logs:ro
